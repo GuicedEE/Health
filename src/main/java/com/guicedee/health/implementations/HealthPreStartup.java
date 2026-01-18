@@ -70,6 +70,12 @@ public class HealthPreStartup implements IGuicePreStartup<HealthPreStartup>, IGu
 
     @Override
     public List<Future<Boolean>> postLoad() {
+        if (healthCheckClasses.isEmpty()) {
+            healthChecks.register("guicedee-health", 2000, promise -> promise.complete(Status.OK()));
+            livenessChecks.register("guicedee-liveness", 2000, promise -> promise.complete(Status.OK()));
+            readinessChecks.register("guicedee-readiness", 2000, promise -> promise.complete(Status.OK()));
+            startupChecks.register("guicedee-startup", 2000, promise -> promise.complete(Status.OK()));
+        }
         for (Class<? extends HealthCheck> clazz : healthCheckClasses) {
             HealthCheck healthCheck = IGuiceContext.get(clazz);
 
@@ -118,7 +124,7 @@ public class HealthPreStartup implements IGuicePreStartup<HealthPreStartup>, IGu
     private void register(HealthChecks hc, HealthCheck check) {
         String name = check.getClass().getName();
         hc.unregister(name);
-        hc.register(name, promise -> {
+        hc.register(name, 2000, promise -> {
             try {
                 HealthCheckResponse response = check.call();
                 if (response.getStatus() == HealthCheckResponse.Status.UP) {

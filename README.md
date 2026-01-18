@@ -118,7 +118,9 @@ public class InitializerStartup implements HealthCheck {
 
 ## 🛠 Manual Registration
 
-If you need to register health checks manually using the Vert.x API, you can inject the `HealthChecks` instance:
+If you need to register health checks manually using the Vert.x API, you can inject the `HealthChecks` instance.
+
+### Constructor Injection
 
 ```java
 import io.vertx.ext.healthchecks.HealthChecks;
@@ -129,6 +131,23 @@ public class MyService {
     @Inject
     public MyService(HealthChecks hc) {
         hc.register("my-check", promise -> promise.complete(Status.OK()));
+    }
+}
+```
+
+### Field Injection
+
+```java
+import io.vertx.ext.healthchecks.HealthChecks;
+import io.vertx.ext.healthchecks.Status;
+import com.google.inject.Inject;
+
+public class MyOtherService {
+    @Inject
+    private HealthChecks hc;
+
+    public void registerChecks() {
+        hc.register("my-field-check", promise -> promise.complete(Status.OK()));
     }
 }
 ```

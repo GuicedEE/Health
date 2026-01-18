@@ -20,7 +20,7 @@ import io.vertx.ext.web.healthchecks.HealthCheckHandler;
  * {@link HealthChecks} instance from {@link HealthPreStartup}.
  * </p>
  */
-public class HealthRouterConfigurator implements VertxRouterConfigurator {
+public class HealthRouterConfigurator implements VertxRouterConfigurator<HealthRouterConfigurator> {
     @Override
     public Router builder(Router router) {
         HealthOptions options = HealthPreStartup.getOptions();
@@ -45,4 +45,11 @@ public class HealthRouterConfigurator implements VertxRouterConfigurator {
 
         return router;
     }
+
+    @Override
+    public Integer sortOrder() {
+        return Integer.MIN_VALUE + 60;
+    }
+
+
 }
