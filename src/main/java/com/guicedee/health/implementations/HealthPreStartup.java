@@ -195,7 +195,38 @@ public class HealthPreStartup implements IGuicePreStartup<HealthPreStartup>, IGu
         var healthConfig = IGuiceContext.instance().getScanResult().getClassesWithAnnotation(HealthOptions.class);
         if (healthConfig.size() == 1) {
             var clazz = healthConfig.getFirst().loadClass();
-            return clazz.getDeclaredAnnotation(HealthOptions.class);
+            HealthOptions annotation = clazz.getDeclaredAnnotation(HealthOptions.class);
+            return new HealthOptions() {
+                @Override
+                public Class<? extends java.lang.annotation.Annotation> annotationType() {
+                    return HealthOptions.class;
+                }
+
+                @Override
+                public boolean enabled() {
+                    return Boolean.parseBoolean(com.guicedee.client.Environment.getSystemPropertyOrEnvironment("HEALTH_ENABLED", String.valueOf(annotation.enabled())));
+                }
+
+                @Override
+                public String path() {
+                    return com.guicedee.client.Environment.getSystemPropertyOrEnvironment("HEALTH_PATH", annotation.path());
+                }
+
+                @Override
+                public String livenessPath() {
+                    return com.guicedee.client.Environment.getSystemPropertyOrEnvironment("HEALTH_LIVENESS_PATH", annotation.livenessPath());
+                }
+
+                @Override
+                public String readinessPath() {
+                    return com.guicedee.client.Environment.getSystemPropertyOrEnvironment("HEALTH_READINESS_PATH", annotation.readinessPath());
+                }
+
+                @Override
+                public String startupPath() {
+                    return com.guicedee.client.Environment.getSystemPropertyOrEnvironment("HEALTH_STARTUP_PATH", annotation.startupPath());
+                }
+            };
         }
         return null;
     }
