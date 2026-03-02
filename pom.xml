@@ -10,14 +10,14 @@
     </parent>
 
     <groupId>com.guicedee</groupId>
-    <artifactId>guiced-health</artifactId>
+    <artifactId>health</artifactId>
     <packaging>jar</packaging>
     <version>2.0.0-SNAPSHOT</version>
 
     <name>GuicedEE Health</name>
     <description>MicroProfile Health for GuicedEE</description>
 
-    <url>https://github.com/GuicedEE/Metrics</url>
+    <url>https://github.com/GuicedEE/Health</url>
 
     <properties>
         <ignore.moditect>true</ignore.moditect>
@@ -29,7 +29,7 @@
 
         <dependency>
             <groupId>com.guicedee</groupId>
-            <artifactId>guiced-vertx</artifactId>
+            <artifactId>vertx</artifactId>
         </dependency>
 
         <dependency>
@@ -38,13 +38,13 @@
         </dependency>
 
         <dependency>
-            <groupId>com.guicedee.services</groupId>
+            <groupId>com.guicedee.modules.services</groupId>
             <artifactId>health-core</artifactId>
         </dependency>
 
         <dependency>
             <groupId>com.guicedee</groupId>
-            <artifactId>guice-inject-client</artifactId>
+            <artifactId>client</artifactId>
         </dependency>
 
         <dependency>
@@ -54,7 +54,7 @@
 
         <dependency>
             <groupId>com.guicedee</groupId>
-            <artifactId>guice-injection</artifactId>
+            <artifactId>inject</artifactId>
         </dependency>
 
         <dependency>
@@ -79,7 +79,7 @@
         </dependency>
         <dependency>
             <groupId>com.guicedee</groupId>
-            <artifactId>guiced-vertx-web</artifactId>
+            <artifactId>web</artifactId>
         </dependency>
     </dependencies>
 

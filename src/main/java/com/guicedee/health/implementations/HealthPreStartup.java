@@ -6,6 +6,8 @@ import com.guicedee.client.services.lifecycle.IGuicePreStartup;
 import com.guicedee.client.services.lifecycle.IGuicePostStartup;
 import com.guicedee.health.HealthOptions;
 import com.guicedee.vertx.spi.VertXPreStartup;
+import io.smallrye.mutiny.Multi;
+import io.smallrye.mutiny.Uni;
 import io.vertx.core.Future;
 import io.vertx.ext.healthchecks.HealthChecks;
 import io.vertx.ext.healthchecks.Status;
@@ -69,50 +71,53 @@ public class HealthPreStartup implements IGuicePreStartup<HealthPreStartup>, IGu
     }
 
     @Override
-    public List<Future<Boolean>> postLoad() {
+    public List<Uni<Boolean>> postLoad() {
         if (healthCheckClasses.isEmpty()) {
             healthChecks.register("guicedee-health", 2000, promise -> promise.complete(Status.OK()));
             livenessChecks.register("guicedee-liveness", 2000, promise -> promise.complete(Status.OK()));
             readinessChecks.register("guicedee-readiness", 2000, promise -> promise.complete(Status.OK()));
             startupChecks.register("guicedee-startup", 2000, promise -> promise.complete(Status.OK()));
         }
-        for (Class<? extends HealthCheck> clazz : healthCheckClasses) {
-            HealthCheck healthCheck = IGuiceContext.get(clazz);
 
-            boolean liveness = clazz.isAnnotationPresent(Liveness.class);
-            boolean readiness = clazz.isAnnotationPresent(Readiness.class);
-            boolean startup = clazz.isAnnotationPresent(Startup.class);
-            boolean generic = false;
-            try {
-                Class<? extends java.lang.annotation.Annotation> healthClass = (Class<? extends java.lang.annotation.Annotation>) Class.forName("org.eclipse.microprofile.health.Health");
-                generic = clazz.isAnnotationPresent(healthClass);
-            } catch (ClassNotFoundException e) {
-                // Ignore
-            }
+        return List.of(Multi.createFrom().iterable(healthCheckClasses)
+                .onItem().invoke(clazz -> {
+                    HealthCheck healthCheck = IGuiceContext.get(clazz);
+                    boolean liveness = clazz.isAnnotationPresent(Liveness.class);
+                    boolean readiness = clazz.isAnnotationPresent(Readiness.class);
+                    boolean startup = clazz.isAnnotationPresent(Startup.class);
+                    boolean generic = false;
+                    try {
+                        Class<? extends java.lang.annotation.Annotation> healthClass = (Class<? extends java.lang.annotation.Annotation>) Class.forName("org.eclipse.microprofile.health.Health");
+                        generic = clazz.isAnnotationPresent(healthClass);
+                    } catch (ClassNotFoundException e) {
+                        // Ignore
+                    }
 
-            if (liveness) {
-                register(livenessChecks, healthCheck);
-                if (healthChecks != livenessChecks) {
-                    register(healthChecks, healthCheck);
-                }
-            }
-            if (readiness) {
-                register(readinessChecks, healthCheck);
-                if (healthChecks != readinessChecks) {
-                    register(healthChecks, healthCheck);
-                }
-            }
-            if (startup) {
-                register(startupChecks, healthCheck);
-                if (healthChecks != startupChecks) {
-                    register(healthChecks, healthCheck);
-                }
-            }
-            if (generic || (!liveness && !readiness && !startup)) {
-                register(healthChecks, healthCheck);
-            }
-        }
-        return List.of(Future.succeededFuture(true));
+                    if (liveness) {
+                        register(livenessChecks, healthCheck);
+                        if (healthChecks != livenessChecks) {
+                            register(healthChecks, healthCheck);
+                        }
+                    }
+                    if (readiness) {
+                        register(readinessChecks, healthCheck);
+                        if (healthChecks != readinessChecks) {
+                            register(healthChecks, healthCheck);
+                        }
+                    }
+                    if (startup) {
+                        register(startupChecks, healthCheck);
+                        if (healthChecks != startupChecks) {
+                            register(healthChecks, healthCheck);
+                        }
+                    }
+                    if (generic || (!liveness && !readiness && !startup)) {
+                        register(healthChecks, healthCheck);
+                    }
+                })
+                .collect().last()
+                .replaceWith(true)
+        );
     }
 
     /**

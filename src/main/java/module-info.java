@@ -18,7 +18,7 @@ module com.guicedee.health {
     requires transitive com.guicedee.guicedinjection;
     requires transitive io.vertx.healthcheck;
     requires transitive io.vertx.web;
-    requires transitive com.guicedee.services.health;
+    requires transitive com.guicedee.modules.services.health;
 
     requires com.guicedee.vertx.web;
 

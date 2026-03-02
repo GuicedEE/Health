@@ -6,7 +6,7 @@ open module guiced.health.test {
     requires static lombok;
     requires io.vertx.core;
     requires io.vertx.healthcheck;
-    requires transitive com.guicedee.services.health;
+    requires transitive com.guicedee.modules.services.health;
 
     exports com.guicedee.health.test;
 }
