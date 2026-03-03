@@ -1,4 +1,4 @@
-name: GuicedEE Microprofile Health Library
+name: GuicedEE Microprofile Health
 on:
   workflow_dispatch:
     inputs:

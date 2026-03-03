@@ -23,6 +23,7 @@
         <ignore.moditect>true</ignore.moditect>
         <flatten.pom>true</flatten.pom>
         <maven.test.skip>false</maven.test.skip>
+        <project.scm.nameUrl>GuicedEE/Health</project.scm.nameUrl>
     </properties>
 
     <dependencies>
