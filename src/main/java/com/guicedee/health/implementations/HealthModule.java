@@ -12,6 +12,9 @@ import io.vertx.ext.healthchecks.HealthChecks;
  * </p>
  */
 public class HealthModule extends AbstractModule implements IGuiceModule<HealthModule> {
+    /**
+     * Binds the Vert.x {@link HealthChecks} instance into the Guice context.
+     */
     @Override
     protected void configure() {
         HealthChecks healthChecks = HealthPreStartup.getHealthChecks();

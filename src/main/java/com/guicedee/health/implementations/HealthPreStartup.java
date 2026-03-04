@@ -54,6 +54,11 @@ public class HealthPreStartup implements IGuicePreStartup<HealthPreStartup>, IGu
      */
     private static final List<Class<? extends HealthCheck>> healthCheckClasses = new ArrayList<>();
 
+    /**
+     * Initializes Vert.x health check instances and discovers health check implementations.
+     *
+     * @return a list of futures representing startup completion
+     */
     @Override
     public List<Future<Boolean>> onStartup() {
         if (healthChecks == null) {
@@ -70,6 +75,11 @@ public class HealthPreStartup implements IGuicePreStartup<HealthPreStartup>, IGu
         return List.of(Future.succeededFuture(true));
     }
 
+    /**
+     * Instantiates discovered health checks via Guice and registers them with Vert.x.
+     *
+     * @return a list of Uni representing registration completion
+     */
     @Override
     public List<Uni<Boolean>> postLoad() {
         if (healthCheckClasses.isEmpty()) {
@@ -236,11 +246,19 @@ public class HealthPreStartup implements IGuicePreStartup<HealthPreStartup>, IGu
         return null;
     }
 
+    /**
+     * Performs cleanup during application shutdown.
+     */
     @Override
     public void onDestroy() {
         // No explicit close needed for HealthChecks
     }
 
+    /**
+     * Returns the sort order for this lifecycle hook.
+     *
+     * @return the sort order value
+     */
     @Override
     public Integer sortOrder() {
         return Integer.MIN_VALUE + 60; // Just after VertXPreStartup (MIN_VALUE + 50)

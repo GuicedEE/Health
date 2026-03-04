@@ -34,24 +34,36 @@ public class GuicedHealthCheckResponseProvider implements HealthCheckResponsePro
         private HealthCheckResponse.Status status = HealthCheckResponse.Status.DOWN;
         private Map<String, Object> data = new HashMap<>();
 
+        /**
+         * {@inheritDoc}
+         */
         @Override
         public HealthCheckResponseBuilder name(String name) {
             this.name = name;
             return this;
         }
 
+        /**
+         * {@inheritDoc}
+         */
         @Override
         public HealthCheckResponseBuilder up() {
             this.status = HealthCheckResponse.Status.UP;
             return this;
         }
 
+        /**
+         * {@inheritDoc}
+         */
         @Override
         public HealthCheckResponseBuilder down() {
             this.status = HealthCheckResponse.Status.DOWN;
             return this;
         }
 
+        /**
+         * {@inheritDoc}
+         */
         @Override
         public HealthCheckResponseBuilder status(boolean up) {
             if (up) {
@@ -60,24 +72,36 @@ public class GuicedHealthCheckResponseProvider implements HealthCheckResponsePro
             return down();
         }
 
+        /**
+         * {@inheritDoc}
+         */
         @Override
         public HealthCheckResponseBuilder withData(String key, String value) {
             data.put(key, value);
             return this;
         }
 
+        /**
+         * {@inheritDoc}
+         */
         @Override
         public HealthCheckResponseBuilder withData(String key, long value) {
             data.put(key, value);
             return this;
         }
 
+        /**
+         * {@inheritDoc}
+         */
         @Override
         public HealthCheckResponseBuilder withData(String key, boolean value) {
             data.put(key, value);
             return this;
         }
 
+        /**
+         * {@inheritDoc}
+         */
         @Override
         public HealthCheckResponse build() {
             if (name == null || name.trim().isEmpty()) {
@@ -108,16 +132,25 @@ public class GuicedHealthCheckResponseProvider implements HealthCheckResponsePro
             this.data = data;
         }
 
+        /**
+         * {@inheritDoc}
+         */
         @Override
         public String getName() {
             return name;
         }
 
+        /**
+         * {@inheritDoc}
+         */
         @Override
         public Status getStatus() {
             return status;
         }
 
+        /**
+         * {@inheritDoc}
+         */
         @Override
         public Optional<Map<String, Object>> getData() {
             return Optional.ofNullable(data);

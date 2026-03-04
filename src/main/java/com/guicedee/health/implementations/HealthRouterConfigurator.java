@@ -21,6 +21,12 @@ import io.vertx.ext.web.healthchecks.HealthCheckHandler;
  * </p>
  */
 public class HealthRouterConfigurator implements VertxRouterConfigurator<HealthRouterConfigurator> {
+    /**
+     * Configures the router with health check endpoints.
+     *
+     * @param router the router to configure
+     * @return the configured router
+     */
     @Override
     public Router builder(Router router) {
         HealthOptions options = HealthPreStartup.getOptions();
@@ -46,6 +52,11 @@ public class HealthRouterConfigurator implements VertxRouterConfigurator<HealthR
         return router;
     }
 
+    /**
+     * Returns the sort order for this configurator.
+     *
+     * @return the sort order value
+     */
     @Override
     public Integer sortOrder() {
         return Integer.MIN_VALUE + 60;
