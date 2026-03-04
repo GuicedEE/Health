@@ -8,19 +8,24 @@ import io.vertx.ext.web.healthchecks.HealthCheckHandler;
 
 /**
  * Configures the Vert.x Web Router to expose health check endpoints.
- * <p>
- * This configurator reads {@link HealthOptions} to determine the paths for the following endpoints:
+ *
+ * <p>This configurator reads {@link HealthOptions} to determine the paths for the following endpoints:</p>
  * <ul>
  *     <li>Aggregated Health: defaults to {@code /health}</li>
  *     <li>Liveness: defaults to {@code /health/live}</li>
  *     <li>Readiness: defaults to {@code /health/ready}</li>
  *     <li>Startup: defaults to {@code /health/started}</li>
  * </ul>
- * Each endpoint is backed by a Vert.x {@link HealthCheckHandler} initialized with the corresponding
- * {@link HealthChecks} instance from {@link HealthPreStartup}.
- * </p>
+ * <p>Each endpoint is backed by a Vert.x {@link HealthCheckHandler} initialized with the corresponding
+ * {@link HealthChecks} instance from {@link HealthPreStartup}.</p>
  */
 public class HealthRouterConfigurator implements VertxRouterConfigurator<HealthRouterConfigurator> {
+    /**
+     * Creates a new health router configurator.
+     */
+    public HealthRouterConfigurator() {
+    }
+
     /**
      * Configures the router with health check endpoints.
      *

@@ -22,16 +22,21 @@ import java.util.List;
 
 /**
  * Handles the lifecycle and registration of health checks in GuicedEE.
- * <p>
- * This class implements multiple GuicedEE lifecycle interfaces:
+ *
+ * <p>This class implements multiple GuicedEE lifecycle interfaces:</p>
  * <ul>
  *     <li>{@link IGuicePreStartup}: Initializes Vert.x {@link HealthChecks} instances and scans for {@link HealthCheck} implementations.</li>
  *     <li>{@link IGuicePostStartup}: Instantiates health checks via Guice and registers them with Vert.x health check instances.</li>
  *     <li>{@link IGuicePreDestroy}: Handles cleanup during application shutdown.</li>
  * </ul>
- * </p>
  */
 public class HealthPreStartup implements IGuicePreStartup<HealthPreStartup>, IGuicePostStartup<HealthPreStartup>, IGuicePreDestroy<HealthPreStartup> {
+    /**
+     * Creates a new health pre-startup handler.
+     */
+    public HealthPreStartup() {
+    }
+
     /**
      * The main aggregated health checks instance.
      */

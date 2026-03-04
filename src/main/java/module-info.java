@@ -1,18 +1,16 @@
 /**
  * The GuicedEE Health module provides integration between Vert.x Health Checks and the MicroProfile Health API.
- * <p>
- * It automatically scans for classes implementing {@link org.eclipse.microprofile.health.HealthCheck} and
- * registers them with Vert.x {@link io.vertx.ext.healthchecks.HealthChecks} instances.
- * </p>
- * <p>
- * This module exposes several health check endpoints:
+ *
+ * <p>It automatically scans for classes implementing {@link org.eclipse.microprofile.health.HealthCheck} and
+ * registers them with Vert.x {@link io.vertx.ext.healthchecks.HealthChecks} instances.</p>
+ *
+ * <p>This module exposes several health check endpoints:</p>
  * <ul>
  *     <li>{@code /health}: Aggregated health status</li>
  *     <li>{@code /health/live}: Liveness status (via {@link org.eclipse.microprofile.health.Liveness})</li>
  *     <li>{@code /health/ready}: Readiness status (via {@link org.eclipse.microprofile.health.Readiness})</li>
  *     <li>{@code /health/started}: Startup status (via {@link org.eclipse.microprofile.health.Startup})</li>
  * </ul>
- * </p>
  */
 module com.guicedee.health {
     requires transitive com.guicedee.guicedinjection;

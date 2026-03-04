@@ -10,10 +10,9 @@ import java.util.Optional;
 
 /**
  * Custom implementation of {@link HealthCheckResponseProvider} for GuicedEE.
- * <p>
- * This provider is used by the MicroProfile Health API to create {@link HealthCheckResponseBuilder} instances.
+ *
+ * <p>This provider is used by the MicroProfile Health API to create {@link HealthCheckResponseBuilder} instances.
  * It is registered as a service provider via {@code module-info.java} and {@code META-INF/services}.
- * </p>
  */
 public class GuicedHealthCheckResponseProvider implements HealthCheckResponseProvider {
     /**
