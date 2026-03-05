@@ -15,6 +15,13 @@ import java.util.Optional;
  * It is registered as a service provider via {@code module-info.java} and {@code META-INF/services}.
  */
 public class GuicedHealthCheckResponseProvider implements HealthCheckResponseProvider {
+
+    /**
+     * Creates a new {@link GuicedHealthCheckResponseProvider}.
+     */
+    public GuicedHealthCheckResponseProvider() {
+    }
+
     /**
      * Creates a new instance of {@link GuicedHealthCheckResponseBuilder}.
      *
@@ -29,9 +36,24 @@ public class GuicedHealthCheckResponseProvider implements HealthCheckResponsePro
      * Custom implementation of {@link HealthCheckResponseBuilder} for GuicedEE.
      */
     public static class GuicedHealthCheckResponseBuilder extends HealthCheckResponseBuilder {
+        /**
+         * The name of the health check.
+         */
         private String name;
+        /**
+         * The status of the health check, defaults to {@link HealthCheckResponse.Status#DOWN}.
+         */
         private HealthCheckResponse.Status status = HealthCheckResponse.Status.DOWN;
+        /**
+         * Optional metadata associated with the health check.
+         */
         private Map<String, Object> data = new HashMap<>();
+
+        /**
+         * Creates a new {@link GuicedHealthCheckResponseBuilder}.
+         */
+        public GuicedHealthCheckResponseBuilder() {
+        }
 
         /**
          * {@inheritDoc}
@@ -114,8 +136,17 @@ public class GuicedHealthCheckResponseProvider implements HealthCheckResponsePro
      * Custom implementation of {@link HealthCheckResponse} for GuicedEE.
      */
     public static class GuicedHealthCheckResponse extends HealthCheckResponse {
+        /**
+         * The name of the health check.
+         */
         private final String name;
+        /**
+         * The status of the health check.
+         */
         private final Status status;
+        /**
+         * Optional metadata associated with the health check.
+         */
         private final Map<String, Object> data;
 
         /**
