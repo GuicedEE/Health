@@ -28,7 +28,7 @@ Built on [Vert.x Health Checks](https://vertx.io/docs/vertx-health-check/java/) 
 <summary>Gradle (Kotlin DSL)</summary>
 
 ```kotlin
-implementation("com.guicedee:health:2.0.0-RC3")
+implementation("com.guicedee:health:2.0.0-RC4")
 ```
 </details>
 
