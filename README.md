@@ -2,7 +2,7 @@
 
 [![Build](https://github.com/GuicedEE/Health/actions/workflows/build.yml/badge.svg)](https://github.com/GuicedEE/GuicedHealth/actions/workflows/build.yml)
 [![Maven Central](https://img.shields.io/maven-central/v/com.guicedee/health)](https://central.sonatype.com/artifact/com.guicedee/health)
-[![Maven Snapshot](https://img.shields.io/nexus/s/com.guicedee/health?server=https%3A%2F%2Foss.sonatype.org&label=Maven%20Snapshot)](https://oss.sonatype.org/content/repositories/snapshots/com/guicedee/health/)
+[![Snapshot](https://img.shields.io/badge/Snapshot-2.0.0-SNAPSHOT-orange)](https://github.com/GuicedEE/Packages/packages/maven/com.guicedee.health)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue)](https://www.apache.org/licenses/LICENSE-2.0)
 
 ![Java 25+](https://img.shields.io/badge/Java-25%2B-green)
@@ -81,25 +81,43 @@ No JPMS `provides` declaration is needed for health check classes — they are d
 
 ## 📐 Startup Flow
 
-```
-IGuiceContext.instance()
- └─ IGuicePreStartup hooks
-     └─ HealthPreStartup.onStartup() (sortOrder = MIN_VALUE + 60)
-         ├─ Create 4 HealthChecks instances (health, liveness, readiness, startup)
-         └─ Scan for HealthCheck implementations via ClassGraph
- └─ Guice injector created
-     └─ HealthModule.configure()
-         └─ bind(HealthChecks.class).toInstance(healthChecks)
- └─ IGuicePostStartup hooks
-     └─ HealthPreStartup.postLoad()
-         ├─ Instantiate each discovered HealthCheck via Guice
-         ├─ Inspect @Liveness, @Readiness, @Startup annotations
-         ├─ Register with corresponding HealthChecks instance(s)
-         └─ Un-annotated checks register with the aggregated instance only
-     └─ VertxWebServerPostStartup (from web module)
-         └─ HealthRouterConfigurator.builder() (sortOrder = MIN_VALUE + 60)
-             ├─ Read @HealthOptions / env vars for paths
-             └─ Mount HealthCheckHandler on each endpoint
+```mermaid
+flowchart TD
+    n1["IGuiceContext.instance()"]
+    n2["IGuicePreStartup hooks"]
+    n1 --> n2
+    n3["HealthPreStartup.onStartup()<br/>sortOrder = MIN_VALUE + 60"]
+    n2 --> n3
+    n4["Create 4 HealthChecks instances<br/>health, liveness, readiness, startup"]
+    n3 --> n4
+    n5["Scan for HealthCheck implementations via ClassGraph"]
+    n3 --> n5
+    n6["Guice injector created"]
+    n1 --> n6
+    n7["HealthModule.configure()"]
+    n6 --> n7
+    n8["bind(HealthChecks.class).toInstance(healthChecks)"]
+    n7 --> n8
+    n9["IGuicePostStartup hooks"]
+    n1 --> n9
+    n10["HealthPreStartup.postLoad()"]
+    n9 --> n10
+    n11["Instantiate each discovered HealthCheck via Guice"]
+    n10 --> n11
+    n12["Inspect @Liveness, @Readiness, @Startup annotations"]
+    n10 --> n12
+    n13["Register with corresponding HealthChecks instance(s)"]
+    n10 --> n13
+    n14["Un-annotated checks register with the aggregated instance only"]
+    n10 --> n14
+    n15["VertxWebServerPostStartup<br/>from web module"]
+    n9 --> n15
+    n16["HealthRouterConfigurator.builder()<br/>sortOrder = MIN_VALUE + 60"]
+    n15 --> n16
+    n17["Read @HealthOptions / env vars for paths"]
+    n16 --> n17
+    n18["Mount HealthCheckHandler on each endpoint"]
+    n16 --> n18
 ```
 
 ## 🏥 Health Check Types
@@ -307,14 +325,15 @@ When no `HealthCheck` implementations are found on the classpath, four placehold
 
 ## 🗺️ Module Graph
 
-```
-com.guicedee.health
- ├── com.guicedee.guicedinjection   (GuicedEE runtime — scanning, Guice, lifecycle)
- ├── com.guicedee.vertx.web         (Vert.x Web — Router, route mounting)
- ├── io.vertx.healthcheck           (Vert.x Health Checks — HealthChecks, HealthCheckHandler)
- ├── io.vertx.web                   (Vert.x Web — Router integration)
- ├── io.vertx.core                  (Vert.x core)
- └── com.guicedee.modules.services.health  (MicroProfile Health API — annotations, SPI)
+```mermaid
+flowchart LR
+    com_guicedee_health["com.guicedee.health"]
+    com_guicedee_health --> com_guicedee_guicedinjection["com.guicedee.guicedinjection<br/>GuicedEE runtime — scanning, Guice, lifecycle"]
+    com_guicedee_health --> com_guicedee_vertx_web["com.guicedee.vertx.web<br/>Vert.x Web — Router, route mounting"]
+    com_guicedee_health --> io_vertx_healthcheck["io.vertx.healthcheck<br/>Vert.x Health Checks — HealthChecks, HealthCheckHandler"]
+    com_guicedee_health --> io_vertx_web["io.vertx.web<br/>Vert.x Web — Router integration"]
+    com_guicedee_health --> io_vertx_core["io.vertx.core<br/>Vert.x core"]
+    com_guicedee_health --> com_guicedee_modules_services_health["com.guicedee.modules.services.health<br/>MicroProfile Health API — annotations, SPI"]
 ```
 
 ## 🧩 JPMS
