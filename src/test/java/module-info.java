@@ -1,6 +1,6 @@
-
 open module guiced.health.test {
     requires transitive com.guicedee.health;
+    requires com.guicedee.service.registry;
 
     requires org.junit.jupiter.api;
     requires static lombok;

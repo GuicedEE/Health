@@ -20,6 +20,8 @@ module com.guicedee.health {
 
     requires com.guicedee.vertx.web;
 
+    requires static com.guicedee.service.registry;
+
     exports com.guicedee.health;
 
     opens com.guicedee.health to com.google.guice, com.guicedee.client, com.guicedee.guicedinjection;
