@@ -35,8 +35,8 @@ public class HealthIntegrationTest {
 
         CompletableFuture<io.vertx.ext.healthchecks.CheckResult> future = new CompletableFuture<>();
         healthChecks.checkStatus()
-                .onSuccess(r -> future.complete(r))
-                .onFailure(e -> future.completeExceptionally(e));
+                .onSuccess(future::complete)
+                .onFailure(future::completeExceptionally);
 
         io.vertx.ext.healthchecks.CheckResult result = future.get(5, TimeUnit.SECONDS);
         Assertions.assertNotNull(result);
