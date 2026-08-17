@@ -9,7 +9,7 @@
 ![Vert.X 5](https://img.shields.io/badge/Vert.x-5%2B-green)
 
 Seamless **MicroProfile Health** integration for [GuicedEE](https://github.com/GuicedEE) applications using **Vert.x 5 Health Checks**.
-Annotate your classes with standard `@Liveness`, `@Readiness`, and `@Startup` — health checks are discovered at startup via ClassGraph, registered with Vert.x `HealthChecks`, and exposed as JSON endpoints on the Vert.x Web `Router` automatically.
+Annotate your classes with standard `@Liveness`, `@Readiness`, and `@Startup` — health checks are discovered at startup via ClassGraph, registered with Vert.x `HealthChecks`, and exposed as JSON endpoints on the Vert.x Web `RouterConfig` automatically.
 
 Built on [Vert.x Health Checks](https://vertx.io/docs/vertx-health-check/java/) · [MicroProfile Health](https://github.com/eclipse/microprofile-health) · [Google Guice](https://github.com/google/guice) · JPMS module `com.guicedee.health` · Java 25+
 
