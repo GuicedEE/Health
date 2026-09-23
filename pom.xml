@@ -41,10 +41,6 @@
     </properties>
     <dependencies>
         <dependency>
-            <groupId>com.guicedee</groupId>
-            <artifactId>vertx</artifactId>
-        </dependency>
-        <dependency>
             <groupId>io.vertx</groupId>
             <artifactId>vertx-health-check</artifactId>
         </dependency>
@@ -54,24 +50,11 @@
         </dependency>
         <dependency>
             <groupId>com.guicedee</groupId>
-            <artifactId>client</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>io.vertx</groupId>
-            <artifactId>vertx-core</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.guicedee</groupId>
             <artifactId>inject</artifactId>
         </dependency>
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter-api</artifactId>
             <scope>test</scope>
         </dependency>
         <dependency>
