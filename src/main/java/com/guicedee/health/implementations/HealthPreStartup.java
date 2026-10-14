@@ -1,5 +1,7 @@
 package com.guicedee.health.implementations;
 
+import com.guicedee.client.utils.ClassLoading;
+
 import com.guicedee.client.IGuiceContext;
 import com.guicedee.client.services.lifecycle.IGuicePreDestroy;
 import com.guicedee.client.services.lifecycle.IGuicePreStartup;
@@ -73,9 +75,8 @@ public class HealthPreStartup implements IGuicePreStartup<HealthPreStartup>, IGu
             readinessChecks = HealthChecks.create(vertx);
             startupChecks = HealthChecks.create(vertx);
 
-            healthCheckClasses.addAll(IGuiceContext.instance().getScanResult()
-                    .getClassesImplementing(HealthCheck.class)
-                    .loadClasses(HealthCheck.class));
+            healthCheckClasses.addAll(ClassLoading.loadClasses(IGuiceContext.instance().getScanResult()
+                    .getAllClassesImplementing(HealthCheck.class), HealthCheck.class));
         }
         return List.of(Future.succeededFuture(true));
     }
@@ -214,7 +215,7 @@ public class HealthPreStartup implements IGuicePreStartup<HealthPreStartup>, IGu
     public static HealthOptions getOptions() {
         var healthConfig = IGuiceContext.instance().getScanResult().getClassesWithAnnotation(HealthOptions.class);
         if (healthConfig.size() == 1) {
-            var clazz = healthConfig.getFirst().loadClass();
+            var clazz = ClassLoading.loadClass(healthConfig.getFirst());
             HealthOptions annotation = clazz.getDeclaredAnnotation(HealthOptions.class);
             return new HealthOptions() {
                 @Override
