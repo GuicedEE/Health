@@ -1,6 +1,6 @@
 package com.guicedee.health.implementations;
 
-import com.guicedee.client.utils.ClassLoading;
+import com.guicedee.client.utils.Discovery;
 
 import com.guicedee.client.IGuiceContext;
 import com.guicedee.client.services.lifecycle.IGuicePreDestroy;
@@ -75,8 +75,7 @@ public class HealthPreStartup implements IGuicePreStartup<HealthPreStartup>, IGu
             readinessChecks = HealthChecks.create(vertx);
             startupChecks = HealthChecks.create(vertx);
 
-            healthCheckClasses.addAll(ClassLoading.loadClasses(IGuiceContext.instance().getScanResult()
-                    .getAllClassesImplementing(HealthCheck.class), HealthCheck.class));
+            healthCheckClasses.addAll(Discovery.implementations(HealthCheck.class).stream().map(type -> type.asSubclass(HealthCheck.class)).toList());
         }
         return List.of(Future.succeededFuture(true));
     }
@@ -213,10 +212,9 @@ public class HealthPreStartup implements IGuicePreStartup<HealthPreStartup>, IGu
      * @return The HealthOptions annotation, or null if not found.
      */
     public static HealthOptions getOptions() {
-        var healthConfig = IGuiceContext.instance().getScanResult().getClassesWithAnnotation(HealthOptions.class);
+        var healthConfig = Discovery.annotations(HealthOptions.class);
         if (healthConfig.size() == 1) {
-            var clazz = ClassLoading.loadClass(healthConfig.getFirst());
-            HealthOptions annotation = clazz.getDeclaredAnnotation(HealthOptions.class);
+            HealthOptions annotation = healthConfig.getFirst();
             return new HealthOptions() {
                 @Override
                 public Class<? extends java.lang.annotation.Annotation> annotationType() {
